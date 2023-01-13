@@ -1,0 +1,31 @@
+body {
+    background-color: black;
+    overflow: hidden;
+}
+  
+.star {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.laser {
+    position: absolute;
+    width: 3px;
+    height: 2px;
+    background-color: red;
+  }
+
+#ship {
+    user-select: none;
+    image-rendering: pixelated;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform-origin: center center;
+    transform: translate(-50%, -50%);
+}
