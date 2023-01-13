@@ -1,10 +1,12 @@
-var ship = document.getElementById("ship");
+const ship = document.getElementById("ship");
+const starContainer = document.getElementById('stars');
+
 var shipCoords = {
   x: ship.offsetLeft + (ship.clientWidth / 2),
   y: ship.offsetTop + (ship.clientHeight / 2)
 };
 var angle = 0;
-
+var canShoot = true;
 
 document.onmousemove = function(event) {
     angle = Math.atan2(event.x - shipCoords.x, - (event.y - shipCoords.y) )*(180 / Math.PI);
@@ -12,6 +14,7 @@ document.onmousemove = function(event) {
 }
 
 document.onclick = function(event) {
+    if(!canShoot) return;
     event.preventDefault();
     let laserAngle = angle;
     let laser = document.createElement("div");
@@ -21,6 +24,10 @@ document.onclick = function(event) {
     laser.style.left = shipCoords.x + (ship.clientWidth/2 * Math.cos((laserAngle-90) * (Math.PI/180))) + "px";
     laser.style.transform = "rotate(" + laserAngle + "deg)";
     document.body.appendChild(laser);
+    canShoot = false;
+    setTimeout(function() {
+        canShoot = true;
+    }, 200);
     function animateLaser() {
         laser.style.top = laser.offsetTop + (Math.sin((laserAngle-90) * (Math.PI / 180)) * 10) + "px";
         laser.style.left = laser.offsetLeft + (Math.cos((laserAngle-90) * (Math.PI / 180)) * 10) + "px";
@@ -31,11 +38,9 @@ document.onclick = function(event) {
         }
     }
     animateLaser();
+    
 }
 
-const starContainer = document.getElementById('stars');
-
-  
 function createStar() {
     var star = document.createElement("div");
     star.classList.add("star");
