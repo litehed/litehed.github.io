@@ -9,7 +9,7 @@ var angle = 0;
 var canShoot = true;
 
 document.onmousemove = function(event) {
-    angle = Math.atan2(event.x - shipCoords.x, - (event.y - shipCoords.y) )*(180 / Math.PI);
+    angle = Math.atan2(event.pageX - shipCoords.x, - (event.pageY - shipCoords.y) )*(180 / Math.PI);
     ship.style.transform = "rotate(" + angle + "deg)";
 }
 
@@ -19,7 +19,6 @@ document.onclick = function(event) {
     let laserAngle = angle;
     let laser = document.createElement("div");
     laser.classList.add("laser");
-    // document.write("shipCoords.x: " + shipCoords.x + " clientWidth/2: " + ship.clientWidth/2);
     laser.style.top = shipCoords.y + (ship.clientHeight/2 * Math.sin((laserAngle-90) * (Math.PI/180))) + "px";
     laser.style.left = shipCoords.x + (ship.clientWidth/2 * Math.cos((laserAngle-90) * (Math.PI/180))) + "px";
     laser.style.transform = "rotate(" + laserAngle + "deg)";
