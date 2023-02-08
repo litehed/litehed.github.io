@@ -1,7 +1,27 @@
+@media (max-width: 767px) {
+  body {
+    zoom: 175%;
+  }
+}
+
 #switch-page-button {
   position: absolute;
   top: 20px;
   right: 20px;
+  background-color: black;
+  color: white;
+  border: 2px solid white;
+  transition: all 0.2s ease-in-out;
+}
+
+#switch-page-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
+}
+
+#switch-page-button:active {
+  transform: translateY(2px);
+  box-shadow: none;
 }
 
 #linkBox {
@@ -32,7 +52,7 @@
   text-align: center;
   padding: 0;
   opacity: 0;
-  animation: show-item 4.0s ease-out forwards;
+  animation: show-item 3.0s ease-out forwards;
 }
 
 @keyframes show-item {
