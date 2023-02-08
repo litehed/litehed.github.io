@@ -1,6 +1,80 @@
+#switch-page-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#linkBox {
+
+  opacity: 0;
+  transform: scale(0);
+  animation: open-box 0.7s ease-out forwards;
+
+  width: 30%;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 2px solid white;
+  z-index: 0;
+}
+
+@keyframes open-box {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#linkBox ul {
+  font-size: large;
+  list-style-type: none;
+  text-align: center;
+  padding: 0;
+  opacity: 0;
+  animation: show-item 4.0s ease-out forwards;
+}
+
+@keyframes show-item {
+  to {
+    opacity: 1;
+  }
+}
+
+#linkBox a {
+  text-decoration: none;
+  color: white;
+  transition: font-size 0.2s ease-out;
+  display: block;
+  padding: 10px 0;
+}
+
+#linkBox a:hover {
+  font-size: 110%;
+}
+
+#heading {
+  font-size: x-large;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  z-index: 1;
+  margin-left: -10px;
+}
+
 body {
     background-color: black;
     overflow: hidden;
+}
+
+h1 {
+    color: white;
+    user-select: none;
+    font-family: 'VT323', monospace;
+    margin-left: 20px; 
 }
   
 .star {
@@ -29,4 +103,27 @@ body {
     scale: 2;
     transform-origin: center center;
     transform: translate(-50%, -50%);
+}
+
+#enemy-github {
+    user-select: none;
+    image-rendering: pixelated;
+    position: absolute;
+    right: 30%;
+    top: 50%;
+    scale: 2;
+    transform: translateY(-50%);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(-50%) translateY(-2px);
+  }
+  50% {
+    transform: translateY(-50%) translateY(2px);
+  }
+  100% {
+    transform: translateY(-50%) translateY(-2px);
+  }
 }

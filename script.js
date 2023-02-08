@@ -8,11 +8,15 @@ var shipCoords = {
 var angle = 0;
 var canShoot = true;
 
+// Ship angle transform
+
 document.onmousemove = function(event) {
     angle = Math.atan2(event.pageX - shipCoords.x, - (event.pageY - shipCoords.y) )*(180 / Math.PI);
     ship.style.transform = "rotate(" + angle + "deg)";
 }
 
+// Laser shot window.open("https://www.example.com", "_blank");
+var githubEnemy = document.getElementById("enemy-github")
 document.onclick = function(event) {
     if(!canShoot) return;
     event.preventDefault();
@@ -28,8 +32,20 @@ document.onclick = function(event) {
         canShoot = true;
     }, 200);
     function animateLaser() {
+        let laserRect = laser.getBoundingClientRect();
+        let githubRect = githubEnemy.getBoundingClientRect();
+
+        var overlap = !(laserRect.right < githubRect.left || 
+            laserRect.left > githubRect.right || 
+            laserRect.bottom < githubRect.top || 
+            laserRect.top > githubRect.bottom)
+
         laser.style.top = laser.offsetTop + (Math.sin((laserAngle-90) * (Math.PI / 180)) * 10) + "px";
         laser.style.left = laser.offsetLeft + (Math.cos((laserAngle-90) * (Math.PI / 180)) * 10) + "px";
+        if(overlap) {
+            window.open("https://github.com/litehed", "_blank");
+            laser.remove()
+        }
         if (laser.offsetLeft > window.innerWidth || laser.offsetTop < 2 || laser.offsetLeft < 2 || laser.offsetTop > window.innerHeight) {
             laser.remove();
         } else {
@@ -40,11 +56,22 @@ document.onclick = function(event) {
     
 }
 
+// const img = document.getElementById("enemy-github")
+// let y = 0;
+// setInterval(() => {
+//     img.style.top = y + 'px';
+//     y += 1;
+//     if(y === 10) y = 0;
+// }, 10);
+
+// Star generation and movement
 function createStar() {
     var star = document.createElement("div");
     star.classList.add("star");
-    star.style.top = Math.floor(Math.random() * (100 - 0 + 1) + 0) + "%";
-    star.style.left = Math.floor(Math.random() * (100 - 0 + 1) + 0) + "%";
+    let leftChance = Math.random()
+    star.style.top = Math.floor(Math.random() * (101)) + "%";
+    star.style.left = (leftChance > 0.4) ? Math.floor(Math.random() * (11) + 90) : Math.floor(Math.random() * (89)) + "%";
+    // star.style.left = Math.floor(Math.random() * (101)) + "%";
     starContainer.appendChild(star);
     
     function animateStar() {
@@ -59,4 +86,4 @@ function createStar() {
     animateStar();
 }
 
-setInterval(createStar, 100);
+setInterval(createStar, 90);
