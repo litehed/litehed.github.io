@@ -1,5 +1,6 @@
 const ship = document.getElementById("ship");
 const starContainer = document.getElementById('stars');
+const githubEnemy = document.getElementById("enemy-github");
 
 var shipCoords = {
   x: ship.offsetLeft + (ship.clientWidth / 2),
@@ -16,7 +17,6 @@ document.onmousemove = function(event) {
 }
 
 // Laser shot window.open("https://www.example.com", "_blank");
-var githubEnemy = document.getElementById("enemy-github")
 document.onclick = function(event) {
     if(!canShoot) return;
     event.preventDefault();
@@ -45,6 +45,7 @@ document.onclick = function(event) {
         if(overlap) {
             window.open("https://github.com/litehed", "_blank");
             laser.remove()
+            return;
         }
         if (laser.offsetLeft > window.innerWidth || laser.offsetTop < 2 || laser.offsetLeft < 2 || laser.offsetTop > window.innerHeight) {
             laser.remove();
@@ -65,25 +66,44 @@ document.onclick = function(event) {
 // }, 10);
 
 // Star generation and movement
-function createStar() {
-    var star = document.createElement("div");
+const createStar = () => {
+    const star = document.createElement("div");
     star.classList.add("star");
-    let leftChance = Math.random()
-    star.style.top = Math.floor(Math.random() * (101)) + "%";
-    star.style.left = (leftChance > 0.4) ? Math.floor(Math.random() * (11) + 90) : Math.floor(Math.random() * (89)) + "%";
-    // star.style.left = Math.floor(Math.random() * (101)) + "%";
+    
+    // Randomly position the star
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.left = `${Math.random() * 100}%`;
+    
+    const size = Math.random() * 2 + 1; // 1-3 px
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    
     starContainer.appendChild(star);
     
-    function animateStar() {
-        star.style.left = star.offsetLeft - 1 + "px";
-        if (star.offsetLeft < -20) {
-            star.remove();
-        } else {
-            requestAnimationFrame(animateStar);
-        }
-    }
-
-    animateStar();
-}
-
-setInterval(createStar, 90);
+    const startPosition = Math.random() * window.innerWidth;
+    star.style.transform = `translateX(${startPosition}px)`;
+    
+    const animateStar = () => {
+      const currentPosition = parseFloat(star.style.transform.match(/translateX\((.*?)px\)/)[1]);
+      
+      if (currentPosition < -20) {
+        star.remove();
+      } else {
+        const newPosition = currentPosition - 1;
+        star.style.transform = `translateX(${newPosition}px)`;
+        requestAnimationFrame(animateStar);
+      }
+    };
+  
+    requestAnimationFrame(animateStar);
+  };
+  
+  const createStarsInterval = setInterval(createStar, 90);
+  
+  const stopCreatingStars = () => clearInterval(createStarsInterval);
+  
+  // Initial Stars
+  const initialStarCount = 50;
+  for (let i = 0; i < initialStarCount; i++) {
+    createStar();
+  }
