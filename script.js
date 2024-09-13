@@ -1,6 +1,25 @@
 const ship = document.getElementById("ship");
 const starContainer = document.getElementById('stars');
-const githubEnemy = document.getElementById("enemy-github");
+
+const enemies = [
+  {
+    id: "enemy-github",
+    link: "https://github.com/litehed"
+  },
+  {
+    id: "enemy-linkedin",
+    link: "https://www.linkedin.com/in/ethan-leitner-220965251/"
+  }
+];
+
+enemies.forEach(enemy => {
+  const enemyElement = document.getElementById(enemy.id);
+  if (enemyElement) {
+    enemy.element = enemyElement;
+  } else {
+    console.warn(`Enemy element with id "${enemy.id}" not found.`);
+  }
+});
 
 var shipCoords = {
   x: ship.offsetLeft + (ship.clientWidth / 2),
@@ -22,38 +41,55 @@ document.onclick = function (event) {
   let laserAngle = angle;
   let laser = document.createElement("div");
   laser.classList.add("laser");
-  laser.style.top = shipCoords.y + (ship.clientHeight / 2 * Math.sin((laserAngle - 90) * (Math.PI / 180))) + "px";
-  laser.style.left = shipCoords.x + (ship.clientWidth / 2 * Math.cos((laserAngle - 90) * (Math.PI / 180))) + "px";
-  laser.style.transform = "rotate(" + laserAngle + "deg)";
+  
+  const laserSpeed = 10; // pixels per frame
+  const radians = (laserAngle - 90) * (Math.PI / 180);
+  const velocityX = Math.cos(radians) * laserSpeed;
+  const velocityY = Math.sin(radians) * laserSpeed;
+  
+  let laserX = shipCoords.x + (ship.clientWidth / 2 * Math.cos(radians));
+  let laserY = shipCoords.y + (ship.clientHeight / 2 * Math.sin(radians));
+  
+  laser.style.top = `${laserY}px`;
+  laser.style.left = `${laserX}px`;
+  laser.style.transform = `rotate(${laserAngle}deg)`;
   document.body.appendChild(laser);
   canShoot = false;
   setTimeout(function () {
     canShoot = true;
   }, 200);
+
   function animateLaser() {
+    laserX += velocityX;
+    laserY += velocityY;
+    laser.style.left = `${laserX}px`;
+    laser.style.top = `${laserY}px`;
+
     let laserRect = laser.getBoundingClientRect();
-    let githubRect = githubEnemy.getBoundingClientRect();
 
-    var overlap = !(laserRect.right < githubRect.left ||
-      laserRect.left > githubRect.right ||
-      laserRect.bottom < githubRect.top ||
-      laserRect.top > githubRect.bottom)
+    for (const enemy of enemies) {
+      if (enemy.element) {
+        let enemyRect = enemy.element.getBoundingClientRect();
+        const overlap = !(laserRect.right < enemyRect.left ||
+          laserRect.left > enemyRect.right ||
+          laserRect.bottom < enemyRect.top ||
+          laserRect.top > enemyRect.bottom);
 
-    laser.style.top = laser.offsetTop + (Math.sin((laserAngle - 90) * (Math.PI / 180)) * 10) + "px";
-    laser.style.left = laser.offsetLeft + (Math.cos((laserAngle - 90) * (Math.PI / 180)) * 10) + "px";
-    if (overlap) {
-      window.open("https://github.com/litehed", "_blank");
-      laser.remove()
-      return;
+        if (overlap) {
+          window.open(enemy.link, "_blank");
+          laser.remove();
+          return;
+        }
+      }
     }
-    if (laser.offsetLeft > window.innerWidth || laser.offsetTop < 2 || laser.offsetLeft < 2 || laser.offsetTop > window.innerHeight) {
+
+    if (laserX > window.innerWidth || laserY < 0 || laserX < 0 || laserY > window.innerHeight) {
       laser.remove();
     } else {
       requestAnimationFrame(animateLaser);
     }
   }
   animateLaser();
-
 }
 
 // const img = document.getElementById("enemy-github")

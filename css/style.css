@@ -119,6 +119,17 @@ h1 {
     animation: float 3s ease-in-out infinite;
 }
 
+#enemy-linkedin {
+  user-select: none;
+  image-rendering: pixelated;
+  position: absolute;
+  right: 20%;
+  top: 70%;
+  scale: 2;
+  transform: translateY(-50%);
+  animation: float 3s ease-in-out infinite;
+}
+
 /* _Animation Keyframes_ */
 
 /* Floating Game Enemy */
